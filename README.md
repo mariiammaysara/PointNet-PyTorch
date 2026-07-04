@@ -1,6 +1,6 @@
-# PointNet-from-Scratch
+# PointNet-PyTorch
 
-A from-scratch PyTorch implementation of **PointNet** (Qi et al., 2017) for 3D point cloud classification on ModelNet40.
+A modular PyTorch reimplementation of **PointNet** (Qi et al., 2017), built entirely from scratch, for 3D point cloud classification on ModelNet40.
 
 PointNet solves a deceptively hard problem: point clouds are unordered sets of 3D coordinates, so any model consuming them directly needs to be invariant to the order in which points are given, and robust to rigid transformations of the input. PointNet solves this with a simple but elegant combination of shared per-point MLPs, learned alignment networks (T-Nets), and a symmetric max-pooling operation to aggregate a global shape descriptor. I implemented it as a foundational building block for [Spatialize](https://github.com/mariiammaysara/Spatialize), my text-to-3D spatial reasoning project.
 
@@ -36,6 +36,19 @@ Input points (B, N, 3)
 - **Max pooling** over the point dimension is the symmetric function that makes the whole network invariant to input point order.
 - A regularization term (`||I - AAᵀ||²`) is added to the loss to keep the feature transform matrix close to orthogonal.
 
+## Experiments (Ablations)
+
+To understand why each component of PointNet matters, not just implement it:
+
+| Variant | Test Accuracy |
+|---|---|
+| Full model | [FILL IN] |
+| Without input T-Net | [FILL IN] |
+| Without feature T-Net | [FILL IN] |
+| Average pooling instead of max pooling | [FILL IN] |
+| Without data augmentation | [FILL IN] |
+| Without orthogonal regularization | [FILL IN] |
+
 ## Results
 
 | Metric | Value |
@@ -51,7 +64,7 @@ Confusion matrix: `results/confusion_matrix.png`
 ## Project Structure
 
 ```
-pointnet-from-scratch/
+pointnet-pytorch/
 ├── data/                  # ModelNet40 (downloaded, not committed)
 ├── models/
 │   └── pointnet.py        # T-Net + PointNetClassifier
@@ -67,15 +80,15 @@ pointnet-from-scratch/
 
 **Setup**
 ```bash
-git clone https://github.com/mariiammaysara/PointNet-from-Scratch.git
-cd PointNet-from-Scratch
+git clone https://github.com/mariiammaysara/PointNet-PyTorch.git
+cd PointNet-PyTorch
 pip install -r requirements.txt
 ```
 
 **Training (recommended: Colab, GPU)**
 ```python
-!git clone https://github.com/mariiammaysara/PointNet-from-Scratch.git
-%cd PointNet-from-Scratch
+!git clone https://github.com/mariiammaysara/PointNet-PyTorch.git
+%cd PointNet-PyTorch
 !pip install -r requirements.txt
 !python train.py --epochs 100 --batch_size 32
 ```
@@ -101,7 +114,10 @@ CVPR 2017. arXiv:1612.00593
 https://arxiv.org/abs/1612.00593
 ```
 ---
+---
+
 <div align="center">
-Implemented by Mariam Maysara.
+
+**Implemented from first principles by Mariam Maysara.**
+
 </div>
- 
