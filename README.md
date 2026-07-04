@@ -114,7 +114,6 @@ CVPR 2017. arXiv:1612.00593
 https://arxiv.org/abs/1612.00593
 ```
 ---
----
 
 <div align="center">
 
