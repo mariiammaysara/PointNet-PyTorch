@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix
 
 from models.pointnet import PointNetClassifier
 from dataset import ModelNet40Dataset
-from utils import get_classification_loss
+from utils import get_classification_loss, set_seed
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -145,6 +145,9 @@ def plot_confusion_matrix(y_true: list, y_pred: list, class_names: list, output_
 
 
 def main():
+    # Set random seed for reproducibility
+    set_seed(42)
+    
     parser = argparse.ArgumentParser(description="Evaluate PointNet Classifier on ModelNet40")
     parser.add_argument("--checkpoint", type=str, default="checkpoints/best_model.pth", help="Path to saved model checkpoint (.pth)")
     parser.add_argument("--data_dir", type=str, default="data", help="Directory where dataset is stored")
@@ -175,7 +178,7 @@ def main():
         if not os.path.exists(args.checkpoint):
             logger.error(f"Checkpoint path does not exist: {args.checkpoint}. Please train the model first.")
             return
-        state_dict = torch.load(args.checkpoint, map_location=device)
+        state_dict = torch.load(args.checkpoint, map_location=device, weights_only=True)
         model.load_state_dict(state_dict)
         logger.info(f"Loaded checkpoint from: {args.checkpoint}")
 

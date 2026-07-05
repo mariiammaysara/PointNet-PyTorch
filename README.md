@@ -190,6 +190,8 @@ Where:
 
 - **No Feature Visualization**: T-Net transformation matrices and critical points are not dynamically plotted.
 
+- **No Separate Validation Split**: Model selection (best checkpoint tracking) relies directly on the test set accuracy (`best_test_acc`). While this is a standard simplification in many ModelNet40 open-source repositories, in a production setup, a separate validation split should be used to prevent test-set leakage.
+
 ### Future Work
 
 - **PointNet++**: Extend the architecture with set abstraction layers for hierarchical feature learning.

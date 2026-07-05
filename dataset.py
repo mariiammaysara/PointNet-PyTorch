@@ -14,7 +14,7 @@ def download_modelnet40(data_dir: str):
     
     Expected source: https://shapenet.cs.stanford.edu/media/modelnet40_ply_hdf5_2048.zip
     """
-    url = "https://shapenet.cs.stanford.edu/media/modelnet40_ply_hdf5_2048.zip"
+    url = "https://huggingface.co/datasets/Msun/modelnet40/resolve/main/modelnet40_ply_hdf5_2048.zip"
     zip_path = os.path.join(data_dir, "modelnet40_ply_hdf5_2048.zip")
     extract_path = os.path.join(data_dir, "modelnet40_ply_hdf5_2048")
     

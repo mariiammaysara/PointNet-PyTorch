@@ -1,3 +1,3 @@
-from .pointnet import TNet, PointNetClassifier
+from .pointnet import TNet, PointNetEncoder, PointNetClassifier
 
-__all__ = ["TNet", "PointNetClassifier"]
+__all__ = ["TNet", "PointNetEncoder", "PointNetClassifier"]

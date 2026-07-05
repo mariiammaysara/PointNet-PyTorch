@@ -30,7 +30,7 @@ from tqdm import tqdm
 from config import Config
 from models.pointnet import PointNetClassifier
 from dataset import ModelNet40Dataset
-from utils import get_classification_loss
+from utils import get_classification_loss, set_seed
 from evaluate import evaluate
 
 # Set up logging configuration
@@ -38,6 +38,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def main():
+    # Set random seed for reproducibility
+    set_seed(42)
+    
     # 1. Parse configuration
     config = Config()
     
