@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" width="100%" height="100%">
+  <style>
+    /* Blue - Feature Extraction */
+    .box-feature {
+      stroke: #3b82f6;
+      stroke-width: 2;
+      fill: rgba(59, 130, 246, 0.08);
+      rx: 8px;
+    }
+    /* Purple - Alignment Modules */
+    .box-alignment {
+      stroke: #a855f7;
+      stroke-width: 2;
+      fill: rgba(168, 85, 247, 0.08);
+      rx: 8px;
+    }
+    /* Green - Aggregation */
+    .box-aggregation {
+      stroke: #10b981;
+      stroke-width: 2;
+      fill: rgba(16, 185, 129, 0.08);
+      rx: 8px;
+    }
+    /* Orange - Classification */
+    .box-classification {
+      stroke: #f97316;
+      stroke-width: 2;
+      fill: rgba(249, 115, 22, 0.08);
+      rx: 8px;
+    }
+    .text-title {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      fill: #0f172a;
+      text-anchor: middle;
+    }
+    .text-subtitle {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      fill: #475569;
+      text-anchor: middle;
+    }
+    .arrow {
+      stroke: #64748b;
+      stroke-width: 2;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+    @media (prefers-color-scheme: dark) {
+      .text-title {
+        fill: #f8fafc;
+      }
+      .text-subtitle {
+        fill: #94a3b8;
+      }
+      .arrow {
+        stroke: #94a3b8;
+      }
+    }
+  </style>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="context-stroke" />
+    </marker>
+  </defs>
+
+  <!-- Input Box -->
+  <rect x="37" y="65" width="90" height="70" class="box-feature" />
+  <text x="82" y="95" class="text-title">Input Points</text>
+  <text x="82" y="113" class="text-subtitle">(B, N, 3)</text>
+
+  <!-- Arrow 1 -->
+  <line x1="127" y1="100" x2="157" y2="100" class="arrow" />
+
+  <!-- Input T-Net -->
+  <rect x="157" y="65" width="110" height="70" class="box-alignment" />
+  <text x="212" y="95" class="text-title">Input T-Net</text>
+  <text x="212" y="113" class="text-subtitle">Predicts 3×3 Matrix</text>
+
+  <!-- Arrow 2 -->
+  <line x1="267" y1="100" x2="297" y2="100" class="arrow" />
+
+  <!-- MLP 1 -->
+  <rect x="297" y="65" width="100" height="70" class="box-feature" />
+  <text x="347" y="90" class="text-title">Shared MLP</text>
+  <text x="347" y="108" class="text-subtitle">(1×1 Conv)</text>
+  <text x="347" y="123" class="text-subtitle">(B, N, 64)</text>
+
+  <!-- Arrow 3 -->
+  <line x1="397" y1="100" x2="427" y2="100" class="arrow" />
+
+  <!-- Feature T-Net -->
+  <rect x="427" y="65" width="115" height="70" class="box-alignment" />
+  <text x="484.5" y="95" class="text-title">Feature T-Net</text>
+  <text x="484.5" y="113" class="text-subtitle">Predicts 64×64 Matrix</text>
+
+  <!-- Arrow 4 -->
+  <line x1="542" y1="100" x2="572" y2="100" class="arrow" />
+
+  <!-- MLP 2 -->
+  <rect x="572" y="65" width="115" height="70" class="box-feature" />
+  <text x="629.5" y="90" class="text-title">Shared MLP</text>
+  <text x="629.5" y="108" class="text-subtitle">(1×1 Conv)</text>
+  <text x="629.5" y="123" class="text-subtitle">(B, N, 1024)</text>
+
+  <!-- Arrow 5 -->
+  <line x1="687" y1="100" x2="717" y2="100" class="arrow" />
+
+  <!-- Max Pool -->
+  <rect x="717" y="65" width="125" height="70" class="box-aggregation" />
+  <text x="779.5" y="90" class="text-title">Max Pooling</text>
+  <text x="779.5" y="108" class="text-subtitle">Symmetric (over N)</text>
+  <text x="779.5" y="123" class="text-subtitle">(B, 1024)</text>
+
+  <!-- Arrow 6 -->
+  <line x1="842" y1="100" x2="872" y2="100" class="arrow" />
+
+  <!-- FC Classifier -->
+  <rect x="872" y="65" width="90" height="70" class="box-classification" />
+  <text x="917" y="90" class="text-title">Classifier</text>
+  <text x="917" y="108" class="text-subtitle">FC Layers</text>
+  <text x="917" y="123" class="text-subtitle">(B, 40)</text>
+</svg>
