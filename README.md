@@ -14,6 +14,36 @@ The project reproduces the original architecture—including both T-Nets, shared
 
 ---
 
+## Table of Contents
+
+- [PointNet Architecture](#pointnet-architecture)
+
+- [Overview](#overview)
+
+- [Highlights](#highlights)
+
+- [Results & Training Configuration](#results--training-configuration)
+
+- [Why this project exists](#why-this-project-exists)
+
+- [Mathematical Background](#mathematical-background)
+
+- [Architecture Details](#architecture-details)
+
+- [Lessons Learned](#lessons-learned)
+
+- [Limitations & Future Work](#limitations--future-work)
+
+- [Project Structure](#project-structure)
+
+- [How to Run](#how-to-run)
+
+- [Implementation Notes & Known Issues](#implementation-notes--known-issues)
+
+- [Reference](#reference)
+
+---
+
 ## PointNet Architecture
 
 <p align="center">
@@ -23,6 +53,15 @@ The project reproduces the original architecture—including both T-Nets, shared
 <p align="center">
   <em>A high-level overview of the PointNet classification pipeline.</em>
 </p>
+
+### Pipeline Breakdown
+
+| Pipeline Stage | Color Theme | Core Component & Operation | Output Representation |
+| :--- | :---: | :--- | :--- |
+| **Alignment Modules** | 🟣 Purple | Input & Feature T-Nets (learn spatial transform matrices) | Pose / Feature Aligned Tensors |
+| **Feature Extraction** | 🔵 Blue | Shared MLPs (applied independently to each point via $1 \times 1$ Conv1d) | Point-wise high-dimensional features |
+| **Aggregation** | 🟢 Green | Symmetric Max Pooling (compresses points to a single global descriptor) | Permutation-invariant Global Vector |
+| **Classification** | 🟠 Orange | Fully Connected Layers (maps descriptor to final 40 class scores) | Class Probability Logits |
 
 ---
 
