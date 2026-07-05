@@ -1,0 +1,45 @@
+name: PointNet CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Unit Tests & Verify Pipelines
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Verify T-Net Structure
+      run: python tests/test_tnet.py
+
+    - name: Verify PointNet Classifier
+      run: python tests/test_pointnet.py
+
+    - name: Verify Dataset Loader & Augmentations
+      run: python tests/test_dataset.py
+
+    - name: Verify Utils & Loss Functions
+      run: python tests/test_utils.py
+
+    - name: Verify End-to-End Training Loop (Mock Mode)
+      run: python train.py --mock --epochs 2
+
+    - name: Verify Evaluation Pipeline (Mock Mode)
+      run: python evaluate.py --mock
