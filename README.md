@@ -1,8 +1,18 @@
 # PointNet-PyTorch
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c.svg" alt="PyTorch">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+  <img src="https://img.shields.io/badge/ModelNet40%20Accuracy-86.43%25-success.svg" alt="Accuracy">
+  <img src="https://img.shields.io/badge/Implemented-From%20Scratch-brightgreen.svg" alt="From Scratch">
+</p>
+
 A modular PyTorch reimplementation of PointNet (CVPR 2017), built entirely from scratch for 3D point cloud classification on ModelNet40.
 
 The project reproduces the original architecture—including both T-Nets, shared MLPs, symmetric max pooling, and orthogonal regularization—and serves as the geometric deep learning foundation for Spatialize.
+
+---
 
 ## PointNet Architecture
 
@@ -13,6 +23,8 @@ The project reproduces the original architecture—including both T-Nets, shared
 <p align="center">
   <em>A high-level overview of the PointNet classification pipeline.</em>
 </p>
+
+---
 
 ## Overview
 
@@ -28,17 +40,9 @@ The project reproduces the original architecture—including both T-Nets, shared
 
 ---
 
-## Why this project exists
-
-This implementation serves as the geometric backbone for Spatialize.
-
-Spatialize transforms natural language into structured 3D environments. Understanding unordered 3D point sets is one of the fundamental capabilities required before progressing toward scene generation, spatial reasoning, and point-cloud based representations.
-
----
-
 ## Highlights
 
-- **100% handwritten implementation** from first principles in PyTorch
+- **Pure PyTorch implementation** from first principles
 
 - **From-scratch T-Nets** with identity initialization for pose & feature alignment
 
@@ -49,72 +53,6 @@ Spatialize transforms natural language into structured 3D environments. Understa
 - **Unit-tested architectures** validating exact output shapes and properties
 
 - **Reproducible experiments** with training logs, per-class accuracies, and confusion matrix plots
-
----
-
-## Mathematical Background
-
-PointNet approximates any continuous set function $f(S)$ on a point set $S = \{x_1, \dots, x_n\}$ using a symmetric aggregation function:
-
-$$f(S) \approx \gamma \left( \max_{i=1, \dots, n} \{ h(x_i) \} \right)$$
-
-Where:
-- $h: \mathbb{R}^3 \to \mathbb{R}^d$ is approximated by shared Multi-Layer Perceptrons (MLPs).
-- $\max$ is the element-wise symmetric max-pooling function, ensuring **permutation invariance** (the output is invariant to point order).
-- $\gamma$ represents the fully connected classifier network mapping the global descriptor to output class scores.
-
----
-
-## Architecture Details
-
-- **Shared MLPs (Independent Point Projection)**: Instead of processing the point cloud as a tensor with spatial convolutions, every point is independently projected into a higher-dimensional feature space using shared weights. They are implemented as 1×1 `Conv1d` layers because a 1×1 convolution over the point dimension is mathematically equivalent to applying the same fully connected layer independently to every point, which allows for highly efficient, batched GPU computations.
-
-- **T-Nets (Spatial Transformer Networks)**: Small sub-networks that predict a transformation matrix from the input data itself, aligning the points to a canonical pose. They are initialized to predict the identity matrix so training starts stable.
-
-- **Symmetric Max Pooling**: Aggregates features across all points into a single global shape descriptor. This symmetric operation makes the network completely invariant to input point order.
-
-- **Orthogonal Regularization**: A regularization term ($L_{reg} = \|I - AA^T\|_F^2$) is added to the loss to keep the 64x64 feature transform matrix $A$ close to orthogonal, preventing high-dimensional feature distortion.
-
----
-
-## Visualization Pipeline
-
-```
-Original Point Cloud (B, N, 3)
-         │
-         ▼
-Input T-Net Alignment ──► canonical pose (B, N, 3)
-         │
-         ▼
-Shared MLPs (3 → 64) ──► point projection
-         │
-         ▼
-Feature T-Net Alignment ──► feature alignment (B, N, 64)
-         │
-         ▼
-Shared MLPs (64 → 1024) ──► high-dimensional feature representation
-         │
-         ▼
-Global Descriptor (B, 1024) ◄── Max Pooling (Symmetric Aggregation)
-         │
-         ▼
-FC Classifier (1024 → 512 → 256 → 40) ──► Class Prediction
-```
-
----
-
-## Experiments (Ablations)
-
-To understand why each component of PointNet matters, not just implement it:
-
-| Variant | Test Accuracy |
-|---|---|
-| Full model | 86.43% |
-| Without input T-Net | [FILL IN] |
-| Without feature T-Net | [FILL IN] |
-| Average pooling instead of max pooling | [FILL IN] |
-| Without data augmentation | [FILL IN] |
-| Without orthogonal regularization | [FILL IN] |
 
 ---
 
@@ -151,6 +89,54 @@ To understand why each component of PointNet matters, not just implement it:
 - **Overall Test Accuracy (86.43%)**: Strong diagonal dominance shows correct classification for the majority of shapes.
 - **Perfect Classes (100.00%)**: Geometrically distinct objects like `airplane`, `cone`, `guitar`, and `keyboard` achieved perfect accuracy.
 - **Inter-class Confusions**: Similar geometries caused errors, notably `flower_pot` (20.00%) confused with `plant`/`vase`, `wardrobe`/`night_stand` with boxy furniture, and `cup` with `bowl`/`vase`.
+
+---
+
+## Why this project exists
+
+This implementation serves as the geometric backbone for Spatialize.
+
+Spatialize transforms natural language into structured 3D environments. Understanding unordered 3D point sets is one of the fundamental capabilities required before progressing toward scene generation, spatial reasoning, and point-cloud based representations.
+
+---
+
+## Mathematical Background
+
+PointNet approximates any continuous set function $f(S)$ on a point set $S = \{x_1, \dots, x_n\}$ using a symmetric aggregation function:
+
+$$f(S) \approx \gamma \left( \max_{i=1, \dots, n} \{ h(x_i) \} \right)$$
+
+Where:
+- $h: \mathbb{R}^3 \to \mathbb{R}^d$ is approximated by shared Multi-Layer Perceptrons (MLPs).
+- $\max$ is the element-wise symmetric max-pooling function, ensuring **permutation invariance** (the output is invariant to point order).
+- $\gamma$ represents the fully connected classifier network mapping the global descriptor to output class scores.
+
+---
+
+## Architecture Details
+
+- **Shared MLPs (Independent Point Projection)**: Instead of processing the point cloud as a tensor with spatial convolutions, every point is independently projected into a higher-dimensional feature space using shared weights. They are implemented as 1×1 `Conv1d` layers because a 1×1 convolution over the point dimension is mathematically equivalent to applying the same fully connected layer independently to every point, which allows for highly efficient, batched GPU computations.
+
+- **T-Nets (Spatial Transformer Networks)**: Small sub-networks that predict a transformation matrix from the input data itself, aligning the points to a canonical pose. They are initialized to predict the identity matrix so training starts stable.
+
+- **Symmetric Max Pooling**: Aggregates features across all points into a single global shape descriptor. This symmetric operation makes the network completely invariant to input point order.
+
+- **Orthogonal Regularization**: A regularization term ($L_{reg} = \|I - AA^T\|_F^2$) is added to the loss to keep the 64x64 feature transform matrix $A$ close to orthogonal, preventing high-dimensional feature distortion.
+
+---
+
+## Experiments (Ablations)
+
+To understand why each component of PointNet matters, not just implement it:
+
+| Variant | Test Accuracy |
+|---|---|
+| Full model | 86.43% |
+| Without input T-Net | [FILL IN] |
+| Without feature T-Net | [FILL IN] |
+| Average pooling instead of max pooling | [FILL IN] |
+| Without data augmentation | [FILL IN] |
+| Without orthogonal regularization | [FILL IN] |
 
 ---
 
