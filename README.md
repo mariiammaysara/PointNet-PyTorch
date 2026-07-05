@@ -235,9 +235,16 @@ pip install -r requirements.txt
 ```
 
 **Evaluation**
-```bash
-python evaluate.py
-```
+
+- **Using your trained model**: Once training completes, the best checkpoint is automatically saved to `checkpoints/best_model.pth`. Simply run:
+  ```bash
+  python evaluate.py
+  ```
+
+- **Using pre-trained weights**: If you want to skip training, download `best_model.pth` from the [Releases](https://github.com/mariiammaysara/PointNet-PyTorch/releases) page, place it inside a `checkpoints/` directory at the root, and run:
+  ```bash
+  python evaluate.py
+  ```
 
 ## Implementation Notes & Known Issues
 
