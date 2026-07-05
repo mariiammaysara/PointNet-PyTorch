@@ -84,7 +84,9 @@ The project reproduces the original architecture—including both T-Nets, shared
 
 ### Confusion Matrix
 
-<img src="results/confusion_matrix.png" width="500" alt="Confusion Matrix">
+<p align="center">
+  <img src="results/confusion_matrix.png" width="500" alt="Confusion Matrix">
+</p>
 
 - **Overall Test Accuracy (86.43%)**: Strong diagonal dominance shows correct classification for the majority of shapes.
 - **Perfect Classes (100.00%)**: Geometrically distinct objects like `airplane`, `cone`, `guitar`, and `keyboard` achieved perfect accuracy.
