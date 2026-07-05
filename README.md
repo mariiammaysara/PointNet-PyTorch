@@ -81,16 +81,16 @@ pointnet-pytorch/
 **Setup**
 ```bash
 git clone https://github.com/mariiammaysara/PointNet-PyTorch.git
-cd PointNet-PyTorch/pointnet-from-scratch
+cd PointNet-PyTorch
 pip install -r requirements.txt
 ```
 
 **Training (recommended: Colab, GPU)**
 ```python
 !git clone https://github.com/mariiammaysara/PointNet-PyTorch.git
-%cd PointNet-PyTorch/pointnet-from-scratch
+%cd PointNet-PyTorch
 !pip install -r requirements.txt
-!python train.py --epochs 100 --batch_size 32
+!python train.py --epochs 250 --batch_size 32
 ```
 
 **Evaluation**
