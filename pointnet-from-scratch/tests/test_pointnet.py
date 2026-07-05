@@ -37,7 +37,27 @@ def test_pointnet_classifier_without_feat_transform():
     assert trans_feat is None, f"Expected feature transform to be None, got {trans_feat}"
     print("PointNetClassifier without feature transform test passed!")
 
+def test_pointnet_classifier_ablations():
+    x = torch.randn(2, 1024, 3)
+    
+    # Test use_input_transform=False
+    model = PointNetClassifier(num_classes=40, use_input_transform=False)
+    model.eval()
+    with torch.no_grad():
+        logits, trans, trans_feat = model(x)
+    assert trans is None, f"Expected input transform (trans) to be None when use_input_transform=False, got {trans}"
+    assert logits.shape == (2, 40)
+    
+    # Test pooling_type="avg"
+    model = PointNetClassifier(num_classes=40, pooling_type="avg")
+    model.eval()
+    with torch.no_grad():
+        logits, trans, trans_feat = model(x)
+    assert logits.shape == (2, 40)
+    print("PointNetClassifier ablation options test passed!")
+
 if __name__ == "__main__":
     test_pointnet_classifier_with_feat_transform()
     test_pointnet_classifier_without_feat_transform()
+    test_pointnet_classifier_ablations()
     print("All PointNetClassifier tests passed successfully!")

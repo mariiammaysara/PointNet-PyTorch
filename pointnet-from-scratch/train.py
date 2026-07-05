@@ -50,6 +50,10 @@ def main():
     parser.add_argument("--data_dir", type=str, default="data", help="Directory where dataset is stored")
     parser.add_argument("--mock", action="store_true", help="Use a small mock dataset for quick end-to-end testing")
     parser.add_argument("--no_feature_transform", action="store_true", help="Disable feature transform network")
+    parser.add_argument("--pooling_type", type=str, default=config.pooling_type, choices=["max", "avg"], help="Pooling type (max or avg)")
+    parser.add_argument("--no_input_transform", action="store_true", help="Disable input transform network")
+    parser.add_argument("--reg_weight", type=float, default=config.reg_weight, help="Feature transform regularization weight")
+    parser.add_argument("--no_augmentation", action="store_true", help="Disable training data augmentation")
     
     args = parser.parse_args()
     
@@ -60,13 +64,18 @@ def main():
     device = torch.device(args.device)
     logger.info(f"Training on device: {device}")
     
+    use_input_transform = not args.no_input_transform
+    feature_transform_enabled = not args.no_feature_transform
+    pooling_type = args.pooling_type
+    use_augmentation = not args.no_augmentation
+    
     # 2. Set up Datasets and DataLoaders
     logger.info("Initializing datasets...")
     train_dataset = ModelNet40Dataset(
         root_dir=args.data_dir, 
         split="train", 
         num_points=args.num_points, 
-        augment=True, 
+        augment=use_augmentation, 
         _mock=args.mock
     )
     test_dataset = ModelNet40Dataset(
@@ -94,8 +103,12 @@ def main():
     )
     
     # 3. Initialize PointNetClassifier
-    feature_transform_enabled = not args.no_feature_transform
-    model = PointNetClassifier(num_classes=config.num_classes, feature_transform=feature_transform_enabled)
+    model = PointNetClassifier(
+        num_classes=config.num_classes, 
+        feature_transform=feature_transform_enabled,
+        use_input_transform=use_input_transform,
+        pooling_type=pooling_type
+    )
     model.to(device)
     
     # 4. Initialize Optimizer and Scheduler
@@ -134,7 +147,7 @@ def main():
             logits, trans, trans_feat = model(points)
             
             # Compute cross-entropy loss + feature transform regularization loss
-            loss = get_classification_loss(logits, targets, trans_feat)
+            loss = get_classification_loss(logits, targets, trans_feat, reg_weight=args.reg_weight)
             
             # Backward pass and optimization
             loss.backward()
