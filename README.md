@@ -169,7 +169,7 @@ Where:
 pointnet-pytorch/
 ├── data/                  # ModelNet40 (downloaded, not committed)
 ├── models/
-│   └── pointnet.py        # T-Net + PointNetClassifier
+│   └── pointnet.py        # T-Net + PointNetEncoder + PointNetClassifier
 ├── dataset.py              # ModelNet40 loading, sampling, augmentation
 ├── train.py                 # training loop
 ├── evaluate.py               # evaluation + per-class accuracy + confusion matrix
