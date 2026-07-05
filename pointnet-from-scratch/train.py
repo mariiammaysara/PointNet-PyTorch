@@ -53,6 +53,10 @@ def main():
     
     args = parser.parse_args()
     
+    if args.mock:
+        # Override batch size to be smaller so we can actually run mock testing with 10 samples
+        args.batch_size = min(args.batch_size, 4)
+        
     device = torch.device(args.device)
     logger.info(f"Training on device: {device}")
     
@@ -144,12 +148,17 @@ def main():
             total += points.size(0)
             
             # Update tqdm progress bar
-            running_loss = total_loss / total
-            running_acc = correct / total
+            running_loss = total_loss / total if total > 0 else 0.0
+            running_acc = correct / total if total > 0 else 0.0
             pbar.set_postfix(loss=f"{running_loss:.4f}", acc=f"{100 * running_acc:.2f}%")
             
-        train_loss = total_loss / total
-        train_acc = correct / total
+        if total == 0:
+            logger.warning("No training samples were processed in this epoch. Check if batch_size is larger than dataset size while drop_last=True.")
+            train_loss = 0.0
+            train_acc = 0.0
+        else:
+            train_loss = total_loss / total
+            train_acc = correct / total
         
         # Step the learning rate scheduler
         scheduler.step()
