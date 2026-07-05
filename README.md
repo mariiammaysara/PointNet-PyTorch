@@ -42,7 +42,7 @@ To understand why each component of PointNet matters, not just implement it:
 
 | Variant | Test Accuracy |
 |---|---|
-| Full model | [FILL IN] |
+| Full model | 86.43% |
 | Without input T-Net | [FILL IN] |
 | Without feature T-Net | [FILL IN] |
 | Average pooling instead of max pooling | [FILL IN] |
@@ -53,11 +53,11 @@ To understand why each component of PointNet matters, not just implement it:
 
 | Metric | Value |
 |---|---|
-| Test accuracy (ModelNet40, 40 classes) | [FILL IN] |
-| Best-performing classes | [FILL IN] |
-| Hardest classes | [FILL IN] |
-| Training time | [FILL IN] (Colab T4) |
-| Epochs | [FILL IN] |
+| Test accuracy (ModelNet40, 40 classes) | 86.43% |
+| Best-performing classes | airplane, cone, guitar, keyboard (100.00%) |
+| Hardest classes | flower_pot (20.00%), wardrobe (55.00%), cup (60.00%) |
+| Training time | ~36 minutes (Colab T4) |
+| Epochs | 100 |
 
 Confusion matrix: `results/confusion_matrix.png`
 
