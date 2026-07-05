@@ -37,6 +37,11 @@ def test_dataset_augmentation():
     points, label = dataset_aug[0]
     assert points.shape == (1024, 3)
     
+    # Verify that augmented point cloud still fits in unit sphere
+    distances = torch.sqrt(torch.sum(points ** 2, dim=1))
+    max_dist = torch.max(distances).item()
+    assert abs(max_dist - 1.0) < 1e-5, f"Expected point cloud to fit in unit sphere with max dist 1.0, got {max_dist}"
+    
     # Label range should be within [0, 39]
     for i in range(len(dataset_aug)):
         _, l = dataset_aug[i]
