@@ -1,4 +1,4 @@
-# PointNet-PyTorch
+<h1 align="center">PointNet-PyTorch</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.8%2B-blue.svg" alt="Python">
@@ -123,22 +123,7 @@ Where:
 
 - **Orthogonal Regularization**: A regularization term ($L_{reg} = \|I - AA^T\|_F^2$) is added to the loss to keep the 64x64 feature transform matrix $A$ close to orthogonal, preventing high-dimensional feature distortion.
 
----
 
-## Experiments (Ablations)
-
-To understand why each component of PointNet matters, not just implement it:
-
-| Variant | Test Accuracy |
-|---|---|
-| Full model | 86.43% |
-| Without input T-Net | [FILL IN] |
-| Without feature T-Net | [FILL IN] |
-| Average pooling instead of max pooling | [FILL IN] |
-| Without data augmentation | [FILL IN] |
-| Without orthogonal regularization | [FILL IN] |
-
----
 
 ## Lessons Learned
 
@@ -216,11 +201,17 @@ python evaluate.py
 ## Implementation Notes & Known Issues
 
 - **Identity initialization in T-Net**: the last FC layer's weights are zeroed and its bias set to the flattened identity matrix, so both T-Nets start out predicting "no transformation." Without this, training is noticeably less stable early on.
+
 - **Regularization weight**: the feature transform regularization term is scaled by `0.001` per the paper — too high and it dominates the classification loss, too low and the 64×64 transform can drift.
+
 - **Data augmentation**: random rotation around the Y-axis (up-axis) plus small Gaussian jitter, applied only at training time.
+
 - **Bugs I hit and fixed**:
+
   - **Stanford Dataset Server Connection Timeout**: Stanford's official server (`shapenet.cs.stanford.edu`) frequently timed out or rejected connections from Google Colab. Resolved by downloading ModelNet40 from a Hugging Face mirror.
+
   - **Nested Pathing in Colab**: Repeated execution of `%cd` cells in Jupyter/Colab notebooks caused working directories to nest incorrectly. Fixed by keeping path navigation cell execution controlled and explicit.
+
   - **BatchNorm1d single-sample failure**: `BatchNorm1d` fails during training if the last batch contains exactly 1 sample (due to variance calculation constraints). Resolved by setting `drop_last=True` in the training `DataLoader`.
 
 ## Reference
